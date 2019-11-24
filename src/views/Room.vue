@@ -26,13 +26,16 @@
           @click="leaveRoom">
           {{ leaveRoomTitle }}
         </button>
-        <div
+        <div ref="input"
           class="text-editable"
           :placeholder="randomPersonConnected ? 'Say hi to stranger...' : 'Waiting for stranger to connect...'"
           :contenteditable="randomPersonConnected"
           spellcheck="true"
+          @keyup="updateMessage"
           @keypress.enter="sendMessage"
-        ></div>
+        >
+        <img v-if="hasText" class="send-btn" src="@/assets/up-arrow.png" alt="send">
+        </div>
         <button
           v-if="!randomPersonConnected"
           class="cirlce right"
@@ -80,6 +83,9 @@ export default {
       this.data.socketId = this.$socket.id
       this.isLoading = false
       this.leaveRoomTitle = 'Leave'
+      this.$nextTick(() => {
+        this.$refs.input.focus()
+      })
     },
     'receive-message': function({ message, socketId, time }) {
       let from = socketId === this.$socket.id ? 'me' : 'other'
@@ -103,14 +109,18 @@ export default {
   computed: {
     checkConneced: function() {
       return this.randomPersonConnected
+    },
+    hasText() {
+      return Boolean(this.data.message)
     }
   },
   methods: {
+    updateMessage(e) {
+      this.data.message = e.target.innerText
+    },
     async sendMessage(e) {
       e.preventDefault()
-      const message = e.target.innerText
-      if (this.$socket && message) {
-        this.data.message = message
+      if (this.$socket && this.data.message) {
         this.data.time = new Date()
         await this.$socket.emit('message', this.data)
         this.data.message = null
@@ -201,6 +211,14 @@ export default {
 .container {
   display: flex;
   height: 90%;
+}
+
+.send-btn {
+  position: absolute;
+  right: 4px;
+  height: 40px;
+  width: 40px;
+  top: 2px;
 }
 
 .message-wrap {
@@ -346,6 +364,10 @@ export default {
   .block-mb {
     display: block;
     position: fixed;
+  }
+
+  .container {
+    height: 80%;
   }
 
   .room {
