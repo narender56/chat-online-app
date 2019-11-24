@@ -1,32 +1,53 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
-
+<script>
+// @ is an alias to /src
+export default {
+  name: 'app'
+}
+</script>
 <style>
+html,
+body,
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  font-family: arial,sans-serif;
+  margin: 0;
 }
 
-#nav {
-  padding: 30px;
+.card {
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
+  box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
+  border-radius: 10px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.column {
+  flex-direction: column
+}
+
+.w100p {
+  width: 100%
 }
 </style>
