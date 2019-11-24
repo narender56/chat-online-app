@@ -79,6 +79,7 @@ export default {
       this.randomPersonConnected = true
       this.data.socketId = this.$socket.id
       this.isLoading = false
+      this.leaveRoomTitle = 'Leave'
     },
     'receive-message': function({ message, socketId, time }) {
       let from = socketId === this.$socket.id ? 'me' : 'other'
@@ -91,6 +92,7 @@ export default {
       this.data.room = ''
       this.randomPersonConnected = false
       this.isLoading = false
+      this.leaveRoomTitle = 'Leave'
     }
   },
   mounted() {
