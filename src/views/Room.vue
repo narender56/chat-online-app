@@ -1,12 +1,12 @@
 <template>
-  <div class="room flex">
+  <div class="room flex block-mb">
     <loading
       :active.sync="isLoading"
       :is-full-page="fullPage">
     </loading>
-    <div class="w30p br-right flex center bold" :class="count > 1 ? 'green' : 'red'">{{ count > 1 ? `${count} Users` : 'No Users' }}  Online
+    <div class="w30p br-right flex center bold w100p-mb" :class="count > 1 ? 'green' : 'red'">{{ count > 1 ? `${count} Users` : 'No Users' }}  Online
     </div>
-    <div class="flex message-container w70p">
+    <div class="flex message-container w70p w100p-mb">
       <div class="container">
         <div class="message-wrap" ref="messages">
           <div class="message-list" v-for="(data, i) in messages" :key="`${i}_${Math.random()}`"
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="message-input flex w70p">
+      <div class="message-input flex w70p w100p-mb">
         <button
           v-if="randomPersonConnected"
           class="cirlce inline-cirlce"
@@ -340,5 +340,21 @@ export default {
   content: attr(placeholder);
   color: #999999;
   position: relative;
+}
+
+@media only screen and (max-width: 600px) {
+  .block-mb {
+    display: block;
+    position: fixed;
+  }
+
+  .room {
+    height: 90vh;
+    width: 100%;
+  }
+
+  .w100p-mb {
+    width: 100%;
+  }
 }
 </style>

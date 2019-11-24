@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div class="home flex center" v-if="!accepted">
-      <div class="container flex align-center column">
+    <div class="home flex center flex-mb" v-if="!accepted">
+      <div class="container flex align-center column mt0-mb">
         <h3 class="welcome-text">Welcome to Random World!</h3>
         <h1 class="text-msg">YOU MUST BE OVER 18 AND AGREE TO THE TERMS BELOW BEFORE CONTINUING!</h1>
         <p class="sub-text">THIS SITE ACTIVELY COOPERATES WITH LAW ENFORCEMENT IN ALL INSTANCES OF SUSPECTED ILLEGAL USE OF THE SERVICE, ESPECIALLY IN THE CASE OF UNDERAGE USAGE OF THE SERVICE</p>
-        <div class="flex w100p mt5">
-          <div class="btn-continue red"
+        <div class="flex w100p mt5 mt0-mb">
+          <div class="btn red"
             onmouseover="this.style.opacity=.9;"
             onmouseout="this.style.opacity=1;"
             @click="goBack">
           Go Back
           </div>
-          <div class="btn-continue green"
+          <div class="btn green"
             onmouseover="this.style.opacity=.9;"
             onmouseout="this.style.opacity=1;"
             @click="next">
@@ -79,12 +79,11 @@ export default {
     text-align: center;
   }
 
-  .btn-continue {
+  .btn {
     cursor: pointer;
     font-size: 18pt;
     border-radius: 15px;
     padding: 10px 60px;
-    background-color: rgb(173, 184, 255);
     color: rgb(255, 255, 255);
     margin: 10px auto;
     opacity: 1;
@@ -114,5 +113,22 @@ export default {
     color:#f80a0a;
     text-align:center;
     padding: 20px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .flex-mb {
+      justify-content: space-around;
+      padding: 20px;
+    }
+
+    .btn {
+      font-size: 8pt;
+      display: block;
+      padding: 10px 40px;
+    }
+
+    .mt0-mb {
+      margin: 0;
+    }
   }
 </style>
