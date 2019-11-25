@@ -26,16 +26,21 @@
           @click="leaveRoom">
           {{ leaveRoomTitle }}
         </button>
-        <div ref="input"
+        <input
+          ref="input"
           class="text-editable"
+          type="text"
+          :disabled="!randomPersonConnected"
+          :value="data.message"
           :placeholder="randomPersonConnected ? 'Say hi to stranger...' : 'Waiting for stranger to connect...'"
-          :contenteditable="randomPersonConnected"
-          spellcheck="true"
-          @keyup="updateMessage"
-          @keypress.enter="sendMessage"
-        >
-        <img v-if="hasText" class="send-btn" src="@/assets/up-arrow.png" alt="send">
-        </div>
+          @input="updateMessage"
+          @keypress.enter="sendMessage"/>
+        <img
+          v-if="data.message"
+          class="send-btn"
+          src="@/assets/up-arrow.png"
+          @change="sendMessage"
+          alt="send">
         <button
           v-if="!randomPersonConnected"
           class="cirlce right"
@@ -109,22 +114,18 @@ export default {
   computed: {
     checkConneced: function() {
       return this.randomPersonConnected
-    },
-    hasText() {
-      return Boolean(this.data.message)
     }
   },
   methods: {
     updateMessage(e) {
-      this.data.message = e.target.innerText
+      this.data.message = e.target.value
     },
     async sendMessage(e) {
       e.preventDefault()
       if (this.$socket && this.data.message) {
         this.data.time = new Date()
         await this.$socket.emit('message', this.data)
-        this.data.message = null
-        e.target.innerText = ''
+        this.data.message = ''
       }
     },
     async connectNewRoom() {
@@ -215,10 +216,10 @@ export default {
 
 .send-btn {
   position: absolute;
-  right: 4px;
+  right: 8px;
   height: 40px;
   width: 40px;
-  top: 2px;
+  top: 20px;
 }
 
 .message-wrap {
@@ -344,9 +345,10 @@ export default {
 .text-editable {
   height: 30px;
   width: 100%;
+  font-size: 16px;
   background: #ffffff;
   border: 1px solid #ddd;
-  padding: 14px 7px 0px 20px;
+  padding: 5px 19px;
   margin: 5px;
   border-radius: 25px;
   outline: none;
