@@ -132,11 +132,11 @@ export default {
       if (this.stopTimeout) clearTimeout(this.stopTimeout)
       this.timeout = setTimeout(() => {
         this.$socket.emit('user-typing', true)
-      }, 200)
+      }, 100)
 
       this.stopTimeout = setTimeout(() => {
         this.$socket.emit('user-typing', false)
-      }, 400)
+      }, 500)
     },
     async sendMessage(e) {
       e.preventDefault()
