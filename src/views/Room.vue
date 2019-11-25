@@ -32,9 +32,10 @@
           type="text"
           :disabled="!randomPersonConnected"
           :value="data.message"
-          :placeholder="randomPersonConnected ? 'Say hi to stranger...' : 'Waiting for stranger to connect...'"
+          :placeholder="randomPersonConnected ? 'Type your message here' : 'Waiting for stranger to connect...'"
           @input="updateMessage"
           @keypress.enter="sendMessage"/>
+        <span v-if="strangerIsTyping" class="typing-text">Stanger Typing...</span>
         <img
           v-if="data.message"
           class="send-btn"
@@ -75,7 +76,10 @@ export default {
       randomPersonConnected: false,
       isLoading: false,
       leaveRoomTitle: 'Leave',
-      fullPage: true
+      fullPage: true,
+      strangerIsTyping: false,
+      timeout: null,
+      stopTimeout: null
     }
   },
   sockets: {
@@ -104,12 +108,17 @@ export default {
       this.randomPersonConnected = false
       this.isLoading = false
       this.leaveRoomTitle = 'Leave'
+    },
+    strangerIsTyping: function(flag) {
+      this.strangerIsTyping = flag
     }
   },
   mounted() {
     document.addEventListener('keydown', (e) => {
       if (e.keyCode === 27) this.leaveRoom()
     })
+
+    setTimeout(this.connectNewRoom, 500)
   },
   computed: {
     checkConneced: function() {
@@ -119,6 +128,15 @@ export default {
   methods: {
     updateMessage(e) {
       this.data.message = e.target.value
+      if (this.timeout) clearTimeout(this.timeout)
+      if (this.stopTimeout) clearTimeout(this.stopTimeout)
+      this.timeout = setTimeout(() => {
+        this.$socket.emit('user-typing', true)
+      }, 200)
+
+      this.stopTimeout = setTimeout(() => {
+        this.$socket.emit('user-typing', false)
+      }, 400)
     },
     async sendMessage(e) {
       e.preventDefault()
@@ -147,6 +165,7 @@ export default {
         this.isLoading = true
         await this.$socket.emit('leave-room')
         this.randomPersonConnected = false
+        setTimeout(this.connectNewRoom, 500)
         this.isLoading = false
       }
     },
@@ -221,6 +240,14 @@ export default {
   height: 40px;
   width: 40px;
   top: 20px;
+}
+
+.typing-text {
+  position: absolute;
+  left: 8.5%;
+  bottom: 7%;
+  font-size: 10px;
+  color: green;
 }
 
 .message-wrap {
