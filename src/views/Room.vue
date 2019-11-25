@@ -39,7 +39,7 @@
           v-if="data.message"
           class="send-btn"
           src="@/assets/up-arrow.png"
-          @change="sendMessage"
+          @click="sendMessage"
           alt="send">
         <button
           v-if="!randomPersonConnected"
