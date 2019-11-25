@@ -122,6 +122,7 @@ export default {
     },
     async sendMessage(e) {
       e.preventDefault()
+      if (!this.randomPersonConnected) return
       if (this.$socket && this.data.message) {
         this.data.time = new Date()
         await this.$socket.emit('message', this.data)
