@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="home flex center flex-mb" v-if="!accepted">
-      <div class="container flex align-center column mt0-mb">
+      <div class="container flex column mt0-mb">
         <h3 class="welcome-text">Welcome to Random World!</h3>
         <h1 class="text-msg">YOU MUST BE OVER 18 AND AGREE TO THE TERMS BELOW BEFORE CONTINUING!</h1>
         <p class="sub-text">THIS SITE ACTIVELY COOPERATES WITH LAW ENFORCEMENT IN ALL INSTANCES OF SUSPECTED ILLEGAL USE OF THE SERVICE, ESPECIALLY IN THE CASE OF UNDERAGE USAGE OF THE SERVICE</p>
@@ -113,6 +113,10 @@ export default {
     color:#f80a0a;
     text-align:center;
     padding: 20px;
+  }
+
+  .align-center {
+    align-items: center;
   }
 
   @media only screen and (max-width: 600px) {

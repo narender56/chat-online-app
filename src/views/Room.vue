@@ -1,9 +1,5 @@
 <template>
   <div class="room flex block-mb">
-    <loading
-      :active.sync="isLoading"
-      :is-full-page="fullPage">
-    </loading>
     <div class="w30p br-right flex center bold w100p-mb" :class="count > 1 ? 'green' : 'red'">{{ count > 1 ? `${count} Users` : 'No Users' }}  Online
     </div>
     <div class="flex message-container w70p w100p-mb">
@@ -20,48 +16,55 @@
       </div>
       <div class="message-input flex w70p w100p-mb">
         <button
-          v-if="randomPersonConnected"
-          class="cirlce inline-cirlce"
-          title="Leave Room"
+          class="cirlce"
+          :title="leaveRoomTitle === '+' ? 'Tap to connect with stangers': leaveRoomTitle"
+          :class="{
+            'bg-green': leaveRoomTitle === '+',
+            'bg-red': leaveRoomTitle === 'Leave',
+            'warning': leaveRoomTitle === 'Really?'
+            }"
           @click="leaveRoom">
           {{ leaveRoomTitle }}
         </button>
-        <input
-          ref="input"
-          class="text-editable"
-          type="text"
-          :disabled="!randomPersonConnected"
-          :value="data.message"
-          :placeholder="randomPersonConnected ? 'Type your message here' : 'Waiting for stranger to connect...'"
-          @input="updateMessage"
-          @keypress.enter="sendMessage"/>
+        <div class="w100p flex align-center">
+          <img
+            :title="!randomPersonConnected ? 'Waiting user to connect' : 'Emojies'"
+            class="smile-btn"
+            src="@/assets/smile_grey.png"
+            @click="toggleEmojies"
+            alt="send">
+          <input
+            ref="input"
+            class="text-editable"
+            type="text"
+            :disabled="!randomPersonConnected"
+            :value="data.message"
+            :placeholder="randomPersonConnected ? 'Type your message here' : 'Waiting for stranger to connect...'"
+            @input="updateMessage"
+            @keypress.enter="sendMessage"/>
+        </div>
         <span v-if="strangerIsTyping" class="typing-text">Stanger Typing...</span>
+        <div class="emoji-mart-container" :class="!showEmojis ? 'none': ''">
+          <picker @select="addEmoji"/>
+        </div>
         <img
           v-if="data.message"
           class="send-btn"
           src="@/assets/up-arrow.png"
           @click="sendMessage"
           alt="send">
-        <button
-          v-if="!randomPersonConnected"
-          class="cirlce right"
-          @click="connectNewRoom"
-          title="Connect to new room">
-          +
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
+import { Picker } from 'emoji-mart-vue'
 
 export default {
   name: 'room',
   components: {
-    Loading
+    Picker
   },
   data() {
     return {
@@ -74,12 +77,11 @@ export default {
         time: ''
       },
       randomPersonConnected: false,
-      isLoading: false,
-      leaveRoomTitle: 'Leave',
-      fullPage: true,
+      leaveRoomTitle: '+',
       strangerIsTyping: false,
       timeout: null,
-      stopTimeout: null
+      stopTimeout: null,
+      showEmojis: false
     }
   },
   sockets: {
@@ -90,7 +92,6 @@ export default {
       this.data.room = roomName
       this.randomPersonConnected = true
       this.data.socketId = this.$socket.id
-      this.isLoading = false
       this.leaveRoomTitle = 'Leave'
       this.$nextTick(() => {
         this.$refs.input.focus()
@@ -106,8 +107,7 @@ export default {
       this.data.message = ''
       this.data.room = ''
       this.randomPersonConnected = false
-      this.isLoading = false
-      this.leaveRoomTitle = 'Leave'
+      this.leaveRoomTitle = '+'
     },
     strangerIsTyping: function(flag) {
       this.strangerIsTyping = flag
@@ -120,12 +120,15 @@ export default {
 
     setTimeout(this.connectNewRoom, 500)
   },
-  computed: {
-    checkConneced: function() {
-      return this.randomPersonConnected
-    }
-  },
   methods: {
+    toggleEmojies() {
+      if (!this.randomPersonConnected) return
+      this.showEmojis = !this.showEmojis
+    },
+    addEmoji(event) {
+      this.data.message += event.native
+      this.$refs.input.focus()
+    },
     updateMessage(e) {
       this.data.message = e.target.value
       if (this.timeout) clearTimeout(this.timeout)
@@ -141,6 +144,7 @@ export default {
     async sendMessage(e) {
       e.preventDefault()
       if (!this.randomPersonConnected) return
+      this.showEmojis = false
       if (this.$socket && this.data.message) {
         this.data.time = new Date()
         await this.$socket.emit('message', this.data)
@@ -149,25 +153,25 @@ export default {
     },
     async connectNewRoom() {
       if (this.$socket && this.count > 1) {
-        this.isLoading = true
         if (this.randomPersonConnected) await this.leaveRoom()
         await this.$socket.emit('connect-new-room')
-      } else {
-        alert('No Users are online, Please wait for people to join')
       }
     },
     async leaveRoom() {
       if (this.randomPersonConnected) {
         if (this.leaveRoomTitle === 'Leave') {
-          this.leaveRoomTitle = 'Really'
+          this.leaveRoomTitle = 'Really?'
           return
         }
-        this.isLoading = true
-        await this.$socket.emit('leave-room')
-        this.randomPersonConnected = false
-        setTimeout(this.connectNewRoom, 500)
-        this.isLoading = false
+
+        if (this.leaveRoomTitle === 'Really?') {
+          await this.$socket.emit('leave-room')
+          this.randomPersonConnected = false
+          this.leaveRoomTitle = '+'
+          return
+        }
       }
+      this.connectNewRoom()
     },
     autoScroll() {
       this.$nextTick(() => {
@@ -215,12 +219,28 @@ export default {
   font-size: 30px;
 }
 
+.none {
+  display: none;
+}
+
 .red {
   color: red;
 }
 
 .green {
   color: green;
+}
+
+.bg-green {
+  background-color: #00CB51
+}
+
+.bg-red {
+  background-color: #ff0000
+}
+
+.warning {
+  background-color: #ffbb33
 }
 
 .center {
@@ -236,16 +256,25 @@ export default {
 
 .send-btn {
   position: absolute;
-  right: 8px;
+  right: 12px;
   height: 40px;
   width: 40px;
   top: 20px;
 }
 
+.smile-btn {
+  height: 25px;
+  margin: 10px;
+}
+
+input[type="text"]:disabled  {
+  background: #ccc;
+}
+
 .typing-text {
   position: absolute;
-  left: 8.5%;
-  bottom: 7%;
+  left: 12.5%;
+  bottom: 5%;
   font-size: 10px;
   color: green;
 }
@@ -337,25 +366,15 @@ export default {
 
 .cirlce {
   font-family: Verdana,sans-serif;
-  line-height: 1.5;
+  width: 55px;
+  height: 55px;
+  margin: 0 5px;
   border: none;
-  padding: 8px 16px;
   cursor: pointer;
   border-radius: 50%;
-  font-size: 24px;
+  font-size: 13px;
   color: #ffffff;
-  background-color: #009688;
   outline: none;
-}
-
-.inline-cirlce {
-  margin: 0px 5px;
-  width: 50px;
-  height: 50px;
-  padding: 4px;
-  line-height: 1;
-  background-color: #f80808;
-  font-size: 15px;
 }
 
 .left {
@@ -364,19 +383,13 @@ export default {
   left: 10px;
 }
 
-.right {
-  position: absolute;
-  right: 12px;
-  top: -60px;
-}
-
 .text-editable {
   height: 30px;
-  width: 100%;
+  width: 90%;
   font-size: 16px;
   background: #ffffff;
   border: 1px solid #ddd;
-  padding: 5px 19px;
+  padding: 5px 15px;
   margin: 5px;
   border-radius: 25px;
   outline: none;
@@ -388,6 +401,15 @@ export default {
   content: attr(placeholder);
   color: #999999;
   position: relative;
+}
+
+.emoji-mart-container >>>.emoji-mart-bar {
+  display: none;
+}
+
+.emoji-mart-container {
+  position: absolute;
+  top: -420px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -407,6 +429,15 @@ export default {
 
   .w100p-mb {
     width: 100%;
+  }
+
+  .typing-text {
+    left: 33%;
+  }
+
+  .cirlce {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

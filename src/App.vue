@@ -19,16 +19,10 @@ body,
   margin: 0;
 }
 
-.card {
-  -webkit-box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
-  -moz-box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
-  box-shadow: 0px 0px 3px 0px rgba(10,0,10,1);
-  border-radius: 10px;
-}
-
 .disabled {
   cursor: not-allowed;
   pointer-events: none;
+  background: #dddddd;
 }
 
 .flex {
