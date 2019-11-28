@@ -17,13 +17,11 @@
       <div class="message-input flex w70p w100p-mb">
         <button
           class="cirlce"
-          :disabled="!randomPersonConnected"
           :title="leaveRoomTitle === '+' ? 'Tap to connect with stangers': leaveRoomTitle"
           :class="{
             'bg-green': leaveRoomTitle === '+',
             'bg-red': leaveRoomTitle === 'Leave',
-            'warning': leaveRoomTitle === 'Really?',
-            'disabled': !randomPersonConnected
+            'warning': leaveRoomTitle === 'Really?'
             }"
           @click="leaveRoom">
           {{ leaveRoomTitle }}
