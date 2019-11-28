@@ -62,6 +62,7 @@
 
 <script>
 import { Picker } from 'emoji-mart-vue'
+import tone from '@/assets/tone.mp3'
 
 export default {
   name: 'room',
@@ -100,6 +101,7 @@ export default {
       })
     },
     'receive-message': function({ message, socketId, time }) {
+      if (!document.hasFocus()) this.playSound()
       let from = socketId === this.$socket.id ? 'me' : 'other'
       this.messages.push({ message, from, time })
       this.autoScroll()
@@ -123,6 +125,10 @@ export default {
     setTimeout(this.connectNewRoom, 500)
   },
   methods: {
+    playSound() {
+      const audio = new Audio(tone)
+      audio.play()
+    },
     toggleEmojies() {
       if (!this.randomPersonConnected) return
       this.showEmojis = !this.showEmojis
