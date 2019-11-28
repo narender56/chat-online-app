@@ -17,11 +17,13 @@
       <div class="message-input flex w70p w100p-mb">
         <button
           class="cirlce"
+          :disabled="!randomPersonConnected"
           :title="leaveRoomTitle === '+' ? 'Tap to connect with stangers': leaveRoomTitle"
           :class="{
             'bg-green': leaveRoomTitle === '+',
             'bg-red': leaveRoomTitle === 'Leave',
-            'warning': leaveRoomTitle === 'Really?'
+            'warning': leaveRoomTitle === 'Really?',
+            'disabled': !randomPersonConnected
             }"
           @click="leaveRoom">
           {{ leaveRoomTitle }}
@@ -35,24 +37,24 @@
             alt="send">
           <input
             ref="input"
-            class="text-editable"
+            class="input"
             type="text"
             :disabled="!randomPersonConnected"
             :value="data.message"
             :placeholder="randomPersonConnected ? 'Type your message here' : 'Waiting for stranger to connect...'"
             @input="updateMessage"
             @keypress.enter="sendMessage"/>
+          <img
+            v-if="data.message"
+            class="send-btn"
+            src="@/assets/up-arrow.png"
+            @click="sendMessage"
+            alt="send">
         </div>
         <span v-if="strangerIsTyping" class="typing-text">Stanger Typing...</span>
         <div class="emoji-mart-container" :class="!showEmojis ? 'none': ''">
           <picker @select="addEmoji"/>
         </div>
-        <img
-          v-if="data.message"
-          class="send-btn"
-          src="@/assets/up-arrow.png"
-          @click="sendMessage"
-          alt="send">
       </div>
     </div>
   </div>
@@ -255,11 +257,8 @@ export default {
 }
 
 .send-btn {
-  position: absolute;
-  right: 12px;
   height: 40px;
   width: 40px;
-  top: 20px;
 }
 
 .smile-btn {
@@ -267,7 +266,7 @@ export default {
   margin: 10px;
 }
 
-input[type="text"]:disabled  {
+input[type="text"]:disabled, .disabled  {
   background: #ccc;
 }
 
@@ -306,6 +305,7 @@ input[type="text"]:disabled  {
 .message-wrap .message-list.me .msg {
   background: #bdf7bf;
   color: #111;
+  word-break: break-all;
 }
 
 .message-wrap .message-list .msg {
@@ -383,24 +383,15 @@ input[type="text"]:disabled  {
   left: 10px;
 }
 
-.text-editable {
-  height: 30px;
+.input {
+  padding: 10px;
   width: 90%;
+  height: 20px;
   font-size: 16px;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  padding: 5px 15px;
-  margin: 5px;
   border-radius: 25px;
-  outline: none;
-  position: relative;
+  border: 1px solid #556677;
   color: #555555;
-}
-
-.text-editable[placeholder]:empty::after {
-  content: attr(placeholder);
-  color: #999999;
-  position: relative;
+  outline: none;
 }
 
 .emoji-mart-container >>>.emoji-mart-bar {
