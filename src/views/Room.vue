@@ -1,6 +1,18 @@
 <template>
   <div class="room flex block-mb">
-    <div class="w30p br-right flex center bold w100p-mb" :class="count > 1 ? 'green' : 'red'">{{ count > 1 ? `${count} Users` : 'No Users' }}  Online
+    <div class="w30p br-right flex center bold w100p-mb column">
+      <span v-if="count > 1" class="green">{{ count }} Users Online</span>
+      <div class="w90p">
+        <div class="pa16 gender-items flex justify-between">
+          <span>Female</span> {{ females }}
+        </div>
+        <div class="pa16 gender-items flex justify-between">
+          <span>Male</span> {{ males }}
+        </div>
+        <div class="pa16 gender-items flex justify-between">
+          <span>Trans</span> {{ trans }}
+        </div>
+      </div>
     </div>
     <div class="flex message-container w70p w100p-mb">
       <div class="container">
@@ -60,16 +72,24 @@
 
 <script>
 import { Picker } from 'emoji-mart-vue'
-import tone from '@/assets/tone.mp3'
 
 export default {
   name: 'room',
   components: {
     Picker
   },
+  props: {
+    gender: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       count: 0,
+      females: 0,
+      males: 0,
+      trans: 0,
       messages: [],
       data: {
         message: '',
@@ -86,10 +106,14 @@ export default {
     }
   },
   sockets: {
-    userCount(count) {
-      this.count = count
+    gendersCount({ females = 0, males = 0, trans = 0 }) {
+      this.females = females
+      this.males = males
+      this.trans = trans
+      this.count = females + males + trans
     },
     roomName: function(roomName) {
+      console.log('roomName ', roomName)
       this.data.room = roomName
       this.randomPersonConnected = true
       this.data.socketId = this.$socket.id
@@ -99,7 +123,6 @@ export default {
       })
     },
     'receive-message': function({ message, socketId, time }) {
-      if (!document.hasFocus()) this.playSound()
       let from = socketId === this.$socket.id ? 'me' : 'other'
       this.messages.push({ message, from, time })
       this.autoScroll()
@@ -119,14 +142,12 @@ export default {
     document.addEventListener('keydown', (e) => {
       if (e.keyCode === 27) this.leaveRoom()
     })
-
-    setTimeout(this.connectNewRoom, 500)
+    if (this.gender && this.$socket) {
+      this.$socket.emit('gender', this.gender)
+      setTimeout(this.connectNewRoom, 500)
+    }
   },
   methods: {
-    playSound() {
-      const audio = new Audio(tone)
-      audio.play()
-    },
     toggleEmojies() {
       if (!this.randomPersonConnected) return
       this.showEmojis = !this.showEmojis
@@ -208,14 +229,6 @@ export default {
   justify-content: flex-start;
 }
 
-.w30p {
-  width: 30%;
-}
-
-.w70p {
-  width: 70%;
-}
-
 .br-right {
   border: 1px solid #ddd;
 }
@@ -225,34 +238,16 @@ export default {
   font-size: 30px;
 }
 
-.none {
-  display: none;
-}
-
-.red {
-  color: red;
-}
-
-.green {
-  color: green;
-}
-
-.bg-green {
-  background-color: #00CB51
-}
-
-.bg-red {
-  background-color: #ff0000
-}
-
-.warning {
-  background-color: #ffbb33
+.gender-items {
+  background: #71baff;
+  margin: .5rem;
+  border-radius: 25px;
+  color: #ffffff;
 }
 
 .center {
   justify-content: center;
   align-items: center;
-  background-color: aliceblue;
 }
 
 .container {
@@ -408,6 +403,9 @@ input[type="text"]:disabled, .disabled  {
 }
 
 @media only screen and (max-width: 600px) {
+  .gender-items {
+    display: none;
+  }
   .block-mb {
     display: block;
     position: fixed;

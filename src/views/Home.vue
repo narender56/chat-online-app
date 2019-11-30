@@ -15,44 +15,50 @@
           <div class="btn green"
             onmouseover="this.style.opacity=.9;"
             onmouseout="this.style.opacity=1;"
-            @click="next">
+            @click="toggleModal">
             Continue
           </div>
         </div>
       </div>
     </div>
-    <room v-else/>
+    <Modal @gender="onGender" :open="openModal" v-else-if="openModal" />
+    <room :gender="gender" v-else/>
   </div>
 </template>
 <script>
 import { connectSocket } from '@/utils'
 import Room from '@/views/Room'
+import Modal from '@/components/Modal'
 
 export default {
   name: 'home',
   components: {
-    Room
+    Room,
+    Modal
   },
   data() {
     return {
-      accepted: false
+      accepted: false,
+      openModal: false,
+      gender: ''
     }
   },
   methods: {
     async next() {
       await connectSocket()
+    },
+    toggleModal() {
       this.accepted = true
+      this.openModal = !this.openModal
+    },
+    onGender(value) {
+      this.gender = value
+      this.toggleModal()
+      this.next()
     },
     goBack() {
       window.history.back()
     }
-  },
-  mounted() {
-    window.addEventListener('beforeunload', function(event) {
-      const flag = confirm('Are you sure want to leave')
-      if (flag) window.location.reload()
-      event.preventDefault()
-    })
   }
 }
 </script>
