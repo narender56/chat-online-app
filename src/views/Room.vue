@@ -113,7 +113,6 @@ export default {
       this.count = females + males + trans
     },
     roomName: function(roomName) {
-      console.log('roomName ', roomName)
       this.data.room = roomName
       this.randomPersonConnected = true
       this.data.socketId = this.$socket.id
