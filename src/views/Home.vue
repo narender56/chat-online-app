@@ -27,14 +27,25 @@
 </template>
 <script>
 import { connectSocket } from '@/utils'
-import Room from '@/views/Room'
-import Modal from '@/components/Modal'
 
 export default {
   name: 'home',
   components: {
-    Room,
-    Modal
+    Room: () => import('@/views/Room'),
+    Modal: () => import('@/components/Modal')
+  },
+  metaInfo: {
+    title: 'Terms and Conditions',
+    titleTemplate: '%s <- Devsup.in Chat with Strangers',
+    meta: [
+      { name: 'description', content: 'Please read the terms and conditions before entering into chat with Strangers' },
+      { property: 'og:title', content: 'Chat with random persons, Strangers chat ← debsup.in' },
+      { property: 'og:site_name', content: 'devsup.in' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:description', content: 'Chat with random persons, Strangers chat ← debsup.in, Chatting' },
+      { itemprop: 'name', content: 'Chat with random persons, Strangers chat ← debsup.in' },
+      { itemprop: 'description', content: 'Chat with random persons, Strangers chat ← debsup.in, Chatting' }
+    ]
   },
   data() {
     return {
@@ -116,7 +127,7 @@ export default {
 
   .sub-text {
     font-size: 12px;
-    color:#f80a0a;
+    color:#a50505;
     text-align:center;
     padding: 20px;
   }

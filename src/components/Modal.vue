@@ -30,6 +30,19 @@ export default {
       default: false
     }
   },
+  metaInfo: {
+    title: 'Choose your gender',
+    titleTemplate: '%s <- Devsup.in Chat with Strangers',
+    meta: [
+      { name: 'description', content: 'Please select your gender to chat with strangers' },
+      { property: 'og:title', content: 'Choose your gender, Strangers chat ← debsup.in' },
+      { property: 'og:site_name', content: 'devsup.in' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:description', content: 'Choose your gender, Strangers chat ← debsup.in, Chatting' },
+      { itemprop: 'name', content: 'Choose your gender, Strangers chat ← debsup.in' },
+      { itemprop: 'description', content: 'Choose your gender, Strangers chat ← debsup.in, Chatting' }
+    ]
+  },
   data: function() {
     return {
       gender: ''

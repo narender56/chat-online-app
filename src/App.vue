@@ -74,10 +74,6 @@ body,
   display: none;
 }
 
-.red {
-  color: red;
-}
-
 .green {
   color: green;
 }
