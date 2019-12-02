@@ -186,6 +186,7 @@ export default {
         this.data.time = new Date()
         this.messages.push({ message: this.data.message, from: 'me', time: this.data.time })
         await this.$socket.emit('message', this.data)
+        this.autoScroll()
         this.data.message = ''
       }
     },
