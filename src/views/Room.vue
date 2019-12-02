@@ -101,11 +101,10 @@ export default {
       females: 0,
       males: 0,
       trans: 0,
+      genderEmoji: null,
       messages: [],
       data: {
         message: '',
-        room: '',
-        socketId: '',
         time: ''
       },
       randomPersonConnected: false,
@@ -124,24 +123,23 @@ export default {
       this.trans = trans
       this.count = females + males + trans
     },
-    roomName: function(roomName) {
-      this.data.room = roomName
+    chatConnected: function(gender) {
       this.randomPersonConnected = true
-      this.data.socketId = this.$socket.id
+      if (gender === 'Male') this.genderEmoji = '🍆'
+      if (gender === 'Female') this.genderEmoji = '🍑'
+      if (gender === 'Trans') this.genderEmoji = '✌'
       this.leaveRoomTitle = 'Leave'
       this.$nextTick(() => {
         this.$refs.input.focus()
       })
     },
-    'receive-message': function({ message, socketId, time }) {
-      let from = socketId === this.$socket.id ? 'me' : 'other'
-      this.messages.push({ message, from, time })
+    messageReceived: function({ message, time }) {
+      this.messages.push({ message, from: 'other', time })
       this.autoScroll()
     },
-    'user-disconnected': function() {
+    chatDisconnected: function() {
       this.messages = []
       this.data.message = ''
-      this.data.room = ''
       this.randomPersonConnected = false
       this.leaveRoomTitle = '+'
     },
@@ -186,6 +184,7 @@ export default {
       this.showEmojis = false
       if (this.$socket && this.data.message) {
         this.data.time = new Date()
+        this.messages.push({ message: this.data.message, from: 'me', time: this.data.time })
         await this.$socket.emit('message', this.data)
         this.data.message = ''
       }
