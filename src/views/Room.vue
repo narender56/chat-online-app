@@ -76,19 +76,6 @@ export default {
   components: {
     Picker: () => import('emoji-mart-vue').then(m => m.Picker)
   },
-  metaInfo: {
-    title: 'Chatting Rooms, Strangers Chat',
-    titleTemplate: '%s <- Devsup.in Chat with Strangers',
-    meta: [
-      { name: 'description', content: 'Please select your gender to chat with strangers' },
-      { property: 'og:title', content: 'Choose your gender, Strangers chat ← debsup.in' },
-      { property: 'og:site_name', content: 'devsup.in' },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:description', content: 'Chatting Rooms, Strangers Chat ← debsup.in, Chatting' },
-      { itemprop: 'name', content: 'Chatting Rooms, Strangers Chat ← debsup.in' },
-      { itemprop: 'description', content: 'Chatting Rooms, Strangers Chat ← debsup.in, Chatting' }
-    ]
-  },
   props: {
     gender: {
       type: String,
