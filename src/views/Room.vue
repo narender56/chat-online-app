@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="flex message-container w70p w100p-mb">
-      <div class="container">
+      <div class="container" :class="randomPersonConnected ? 'h93p-mb' : 'h100p-mb'">
         <div class="message-wrap" ref="messages">
           <div class="message-list" v-for="(data, i) in messages" :key="`${i}_${Math.random()}`"
             :class="data.from">
@@ -412,6 +412,14 @@ input[type="text"]:disabled, .disabled  {
 
   .container {
     height: 80%;
+  }
+
+  .h93p-mb {
+    height: 93%;
+  }
+
+  .h100p-mb {
+    height: 100%;
   }
 
   .room {

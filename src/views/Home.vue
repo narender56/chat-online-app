@@ -1,29 +1,27 @@
 <template>
-  <div>
-    <div class="home flex center flex-mb" v-if="!accepted">
-      <div class="container flex column mt0-mb">
-        <h3 class="welcome-text">Welcome to Random World!</h3>
-        <h1 class="text-msg">YOU MUST BE OVER 18 AND AGREE TO THE TERMS BELOW BEFORE CONTINUING!</h1>
-        <p class="sub-text">THIS SITE ACTIVELY COOPERATES WITH LAW ENFORCEMENT IN ALL INSTANCES OF SUSPECTED ILLEGAL USE OF THE SERVICE, ESPECIALLY IN THE CASE OF UNDERAGE USAGE OF THE SERVICE</p>
-        <div class="flex w100p mt5 mt0-mb">
-          <div class="btn red"
-            onmouseover="this.style.opacity=.9;"
-            onmouseout="this.style.opacity=1;"
-            @click="goBack">
-          Go Back
-          </div>
-          <div class="btn green"
-            onmouseover="this.style.opacity=.9;"
-            onmouseout="this.style.opacity=1;"
-            @click="toggleModal">
-            Continue
-          </div>
+  <div class="home flex center flex-mb" v-if="!accepted">
+    <div class="container flex column mt0-mb">
+      <h3 class="welcome-text">Welcome to Random World!</h3>
+      <h1 class="text-msg">YOU MUST BE OVER 18 AND AGREE TO THE TERMS BELOW BEFORE CONTINUING!</h1>
+      <p class="sub-text">THIS SITE ACTIVELY COOPERATES WITH LAW ENFORCEMENT IN ALL INSTANCES OF SUSPECTED ILLEGAL USE OF THE SERVICE, ESPECIALLY IN THE CASE OF UNDERAGE USAGE OF THE SERVICE</p>
+      <div class="flex w100p mt5 mt0-mb">
+        <div class="btn red"
+          onmouseover="this.style.opacity=.9;"
+          onmouseout="this.style.opacity=1;"
+          @click="goBack">
+        Go Back
+        </div>
+        <div class="btn green"
+          onmouseover="this.style.opacity=.9;"
+          onmouseout="this.style.opacity=1;"
+          @click="toggleModal">
+          Continue
         </div>
       </div>
     </div>
-    <Modal @gender="onGender" :open="openModal" v-else-if="openModal" />
-    <room :gender="gender" v-else/>
   </div>
+  <Modal @gender="onGender" :open="openModal" v-else-if="openModal" />
+  <room :gender="gender" v-else/>
 </template>
 <script>
 import { connectSocket } from '@/utils'
@@ -117,10 +115,6 @@ export default {
     color:#a50505;
     text-align:center;
     padding: 20px;
-  }
-
-  .align-center {
-    align-items: center;
   }
 
   @media only screen and (max-width: 600px) {

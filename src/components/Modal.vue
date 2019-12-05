@@ -4,17 +4,34 @@
       <div v-if="open">
         <div class="overlay">
           <div class="modal">
-            <span class="ma16">Are you </span>
-            <input type="radio" v-model="gender" value="Male"/><label class="emoji" @click.stop="gender = 'Male'">👉</label>
-            <input type="radio"  v-model="gender" value="Female"/><label class="emoji" @click.stop="gender = 'Female'">👌</label>
-            <input type="radio"  v-model="gender" value="Trans"/><label class="emoji" @click.stop="gender = 'Trans'">✌</label>
-            <button
-              @click="goto"
-              :disabled="!gender"
-              :class="gender ? 'bg-green': 'disabled'"
-              >
-              Go
-            </button>
+            <section class="flex align-center justify-between w100p-mb">
+              Are you
+              <div>
+                <input type="radio" id="control_01" name="select" value="Male" @click="gender = 'Male'">
+                <label for="control_01">
+                  <h1>👉</h1>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="control_02" name="select" value="Female" @click="gender = 'Female'">
+                <label for="control_02">
+                  <h1>👌</h1>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="control_03" name="select" value="Trans" @click="gender = 'Trans'">
+                <label for="control_03">
+                  <h1>✌</h1>
+                </label>
+              </div>
+               <button
+                @click="goto"
+                :disabled="!gender"
+                :class="gender ? 'bg-green': 'disabled'"
+                >
+                Go
+              </button>
+            </section>
           </div>
         </div>
       </div>
@@ -69,20 +86,6 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.fadeIn-enter {
-  opacity: 0;
-}
-
-.fadeIn-leave-active {
-  opacity: 0;
-  transition: all 0.2s step-end;
-}
-
-.fadeIn-enter .modal,
-.fadeIn-leave-active.modal {
-  transform: scale(1.1);
-}
-
 button {
   padding: 7px;
   color: white;
@@ -106,14 +109,55 @@ button {
   transition: opacity 0.2s ease;
 }
 
-.emoji {
-  font-size: 50px;
-  vertical-align: middle;
-  margin-right: 1rem;
-  margin-left: .2rem;
+h1 {
+  font-size: 70px;
+  margin: 0;
 }
 
-.ma16 {
-  margin: 1rem;
+input[type=radio] {
+  display: none;
 }
+
+label {
+  display: block;
+  background: white;
+  width: 6rem;
+  border: 2px solid rgba(32, 223, 128, 1);
+  text-align: center;
+  border-radius: 50px;
+  box-shadow: 0px 3px 10px -2px rgba(161, 170, 166, 0.5);
+}
+
+input[type="radio"]:checked + label {
+  background: rgba(32, 223, 128, 1);
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 20px rgba(0, 255, 128, 0.75);
+}
+
+p {
+  font-weight: 900;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal {
+    font-size: 15px;
+    height: 10rem;
+    align-items: center;
+    display: flex;
+  }
+
+  .w100p-mb {
+    width: 100%;
+  }
+
+  label {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+}
+
 </style>
