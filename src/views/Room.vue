@@ -12,11 +12,18 @@
         <div class="pa16 gender-items flex justify-between">
           <span>Trans</span> {{ trans }}
         </div>
+        <div class="pa16">
+          <input
+            class="input"
+            :value="backgroundColor"
+            @input="backgroundColor = $event.target.value"
+            placeholder="Enter a color name to change the room color"/>
+        </div>
       </div>
     </div>
     <div class="flex message-container w70p w100p-mb">
       <div class="container" :class="randomPersonConnected ? 'h93p-mb' : 'h100p-mb'">
-        <div class="message-wrap" ref="messages">
+        <div class="message-wrap" ref="messages" :style="{'background-color': backgroundColor}">
           <div class="message-list" v-for="(data, i) in messages" :key="`${i}_${Math.random()}`"
             :class="data.from">
             <div class="msg">
@@ -100,7 +107,8 @@ export default {
       timeout: null,
       stopTimeout: null,
       firstTime: false,
-      showEmojis: false
+      showEmojis: false,
+      backgroundColor: ''
     }
   },
   sockets: {
@@ -405,6 +413,7 @@ input[type="text"]:disabled, .disabled  {
   .gender-items {
     display: none;
   }
+
   .block-mb {
     display: block;
     position: fixed;
@@ -438,6 +447,7 @@ input[type="text"]:disabled, .disabled  {
   .cirlce {
     width: 40px;
     height: 40px;
+    font-size: 9px;
   }
 }
 </style>
