@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <Home />
+    <div class="footer">
+      © 2019 buzzhub, All rights reserved. Contact: +91 8142742972
+    </div>
   </div>
 </template>
 <script>
@@ -22,6 +25,12 @@ body,
   background-color: #ffffff;
   font-family: arial,sans-serif;
   margin: 0;
+}
+
+.footer {
+  font-size: 12px;
+  position: fixed;
+  left: 37%;
 }
 
 .disabled {
