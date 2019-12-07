@@ -12,7 +12,7 @@
         <div class="pa16 gender-items flex justify-between">
           <span>Trans</span> {{ trans }}
         </div>
-        <div class="pa16">
+        <div class="pa16 hide-mb">
           <input
             class="input"
             :value="backgroundColor"
@@ -410,7 +410,7 @@ input[type="text"]:disabled, .disabled  {
 }
 
 @media only screen and (max-width: 600px) {
-  .gender-items {
+  .gender-items, hide-mb {
     display: none;
   }
 
