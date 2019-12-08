@@ -104,4 +104,10 @@ body,
   -moz-box-shadow: 0px -1px 33px 0px rgba(0,0,0,1);
   box-shadow: 0px -1px 33px 0px rgba(0,0,0,1);
 }
+
+@media only screen and (max-width: 600px) {
+  .footer {
+    display: none;
+  }
+}
 </style>

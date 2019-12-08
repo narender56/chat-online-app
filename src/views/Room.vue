@@ -410,7 +410,7 @@ input[type="text"]:disabled, .disabled  {
 }
 
 @media only screen and (max-width: 600px) {
-  .gender-items, hide-mb {
+  .gender-items, .hide-mb {
     display: none;
   }
 
