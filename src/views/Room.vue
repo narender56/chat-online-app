@@ -1,7 +1,7 @@
 <template>
   <div class="room flex block-mb">
     <div class="w30p br-right flex center bold w100p-mb column">
-      <span v-if="count > 1" class="green">{{ count }} Users Online</span>
+      <span v-if="count > 1" class="green text-center">{{ count }} Users Online</span>
       <div class="w90p">
         <div class="pa16 gender-items flex justify-between">
           <span>Female</span> {{ females }}
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="flex message-container w70p w100p-mb">
-      <div class="container" :class="randomPersonConnected ? 'h93p-mb' : 'h100p-mb'">
+      <div class="container">
         <div class="message-wrap" ref="messages" :style="{'background-color': backgroundColor}">
           <div class="message-list" v-for="(data, i) in messages" :key="`${i}_${Math.random()}`"
             :class="data.from">
@@ -259,7 +259,8 @@ export default {
 
 .container {
   display: flex;
-  height: 90%;
+  height: 100%;
+  padding-bottom: 5rem;
 }
 
 .send-btn {
@@ -305,7 +306,7 @@ input[type="text"]:disabled, .disabled  {
 
 .message-wrap .message-list.me {
   align-self: flex-end;
-  margin-bottom: 10px;
+  margin: 8px 0;
 }
 
 .message-wrap .message-list.me .msg {
@@ -321,6 +322,7 @@ input[type="text"]:disabled, .disabled  {
   border-radius: 15px;
   position: relative;
   min-width: 45px;
+  word-break: break-all;
 }
 
 .message-wrap .message-list .time {
@@ -409,6 +411,10 @@ input[type="text"]:disabled, .disabled  {
   top: -420px;
 }
 
+.text-center {
+  text-align: center;
+}
+
 @media only screen and (max-width: 600px) {
   .gender-items, .hide-mb {
     display: none;
@@ -420,7 +426,11 @@ input[type="text"]:disabled, .disabled  {
   }
 
   .container {
-    height: 80%;
+    padding-bottom: 0;
+  }
+
+  .message-wrap {
+    padding: 15px 15px 40px 15px;
   }
 
   .h93p-mb {
