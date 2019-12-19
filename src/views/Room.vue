@@ -25,10 +25,10 @@
       <div class="container">
         <div class="message-wrap" ref="messages" :style="{'background-color': backgroundColor}">
           <div class="message-list" v-for="(data, i) in messages" :key="`${i}_${Math.random()}`"
-            :class="data.from">
+            :class="data.me ? 'me': 'other'">
             <div class="msg">
               {{ data.message }}
-              <div class="time">{{ getTime(data.time) }}</div>
+              <div class="time">{{ data.time }}</div>
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default {
       })
     },
     messageReceived: function({ message, time }) {
-      this.messages.push({ message, from: 'other', time })
+      this.messages.push({ message, me: false, time })
       this.autoScroll()
     },
     chatDisconnected: function() {
@@ -178,8 +178,8 @@ export default {
       if (!this.randomPersonConnected) return
       this.showEmojis = false
       if (this.$socket && this.data.message) {
-        this.data.time = new Date()
-        this.messages.push({ message: this.data.message, from: 'me', time: this.data.time })
+        this.data.time = this.formatTime(new Date())
+        this.messages.push({ message: this.data.message, me: true, time: this.data.time })
         await this.$socket.emit('message', this.data)
         this.autoScroll()
         this.data.message = ''
@@ -214,7 +214,7 @@ export default {
         lastElement.scrollIntoView(scrollIntoViewOptions)
       })
     },
-    getTime(date) {
+    formatTime(date) {
       date = new Date(date)
       const options = {
         hour: 'numeric',
