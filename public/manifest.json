@@ -8,27 +8,27 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "favicon-32.png",
+      "src": "favicon.jpeg",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "favicon-96.png",
+      "src": "favicon.jpeg",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "buzzhub-chrome-144.png",
+      "src": "favicon.jpeg",
       "type": "image/png",
       "sizes": "144x144"
     },
     {
-      "src": "buzzhub-chrome-192.png",
+      "src": "favicon.jpeg",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "buzzhub-chrome-512.png",
+      "src": "favicon.jpeg",
       "sizes": "512x512",
       "type": "image/png"
     }
